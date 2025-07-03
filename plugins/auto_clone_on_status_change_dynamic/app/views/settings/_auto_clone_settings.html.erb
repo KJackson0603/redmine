@@ -1,0 +1,98 @@
+<% trackers = Tracker.all %>
+<% statuses = IssueStatus.all %>
+
+<h3>자동 복제 규칙 설정</h3>
+<div id="auto-clone-settings">
+  <table class="list">
+    <thead>
+      <tr>
+        <th>소스 트래커</th>
+        <th>소스 상태</th>
+        <th>대상 트래커</th>
+		<th>삭제</th>
+      </tr>
+    </thead>
+    <tbody id="rules-container">
+      <% (@settings['rules'] || {}).each do |index, rule| %>
+        <tr>
+          <td>
+            <select name="settings[rules][<%= index %>][source_tracker]">
+              <% trackers.each do |tracker| %>
+                <option value="<%= tracker.name %>" <%= 'selected' if tracker.name == rule['source_tracker'] %>><%= tracker.name %></option>
+              <% end %>
+            </select>
+          </td>
+          <td>
+            <select name="settings[rules][<%= index %>][source_status]">
+              <% statuses.each do |status| %>
+                <option value="<%= status.name %>" <%= 'selected' if status.name == rule['source_status'] %>><%= status.name %></option>
+              <% end %>
+            </select>
+          </td>
+          <td>
+            <select name="settings[rules][<%= index %>][target_tracker]">
+              <% trackers.each do |tracker| %>
+                <option value="<%= tracker.name %>" <%= 'selected' if tracker.name == rule['target_tracker'] %>><%= tracker.name %></option>
+              <% end %>
+            </select>
+          </td>
+		  <td>
+			<a href="#" onclick="this.closest('tr').remove(); return false;">❌</a>
+		  </td>
+        </tr>
+      <% end %>
+	  
+
+      <!-- 💡 숨겨진 템플릿 행 (JS로 복제됨) -->
+      <tr class="rule-template" style="display:none;">
+        <td>
+          <select data-name="source_tracker">
+            <% trackers.each do |tracker| %>
+              <option value="<%= tracker.name %>"><%= tracker.name %></option>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <select data-name="source_status">
+            <% statuses.each do |status| %>
+              <option value="<%= status.name %>"><%= status.name %></option>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <select data-name="target_tracker">
+            <% trackers.each do |tracker| %>
+              <option value="<%= tracker.name %>"><%= tracker.name %></option>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <a href="#" onclick="this.closest('tr').remove(); return false;">❌</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><a href="#" onclick="addRule(); return false;">➕ 규칙 추가</a></p>
+</div>
+	  
+<% rule_index = ((@settings && @settings['rules']) || {}).keys.map(&:to_i).max || 0 %>
+<script>
+	let ruleIndex = <%= rule_index + 1 %>;
+
+	function addRule() {
+	  const template = document.querySelector('.rule-template');
+      const clone = template.cloneNode(true);
+      clone.classList.remove('rule-template');
+      clone.style.display = '';
+	  
+	  // 각 셀렉트에 이름 설정
+      clone.querySelectorAll('select').forEach(select => {
+        const key = select.getAttribute('data-name');
+        select.name = `settings[rules][${ruleIndex}][${key}]`;
+      });
+
+      document.getElementById('rules-container').appendChild(clone);
+      ruleIndex++;
+    }
+</script>
