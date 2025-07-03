@@ -15,4 +15,6 @@ Redmine settings:
   Redmine theme                  Default
 
  Development Server Configuration
-  ![image.png](attachment:841f028c-ff44-49c7-a950-22d1f1bc4c28:image.png)
+
+ ![image](https://github.com/user-attachments/assets/bed0c773-c587-4eab-819d-d03bad140a2c)
+
