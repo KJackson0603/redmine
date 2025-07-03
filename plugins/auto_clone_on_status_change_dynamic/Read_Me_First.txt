@@ -4,7 +4,7 @@ You can set several rules by adding conditions in Plug-in settings.
 - Install -
 1. download the 'zip' file.
 2. unzip
-3. insert 'zip' file into the /usr/src/redmine/plugins/here.unzip directory.
+3. insert 'unzip_directory' file into the /usr/src/redmine/plugins/here.unzip_directory
 4. container restart. (if you commit the image instead of restart, you have to run using new image contained this plugin. Then, it'll be working.)
 
 - User Procedure -
